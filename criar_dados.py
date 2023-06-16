@@ -2,7 +2,7 @@ import os
 import django
 import random
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unifood.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'umenu.settings')
 django.setup()
 
 from products.models import Vendedor, Setor, Produto

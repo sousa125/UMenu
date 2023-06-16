@@ -1,5 +1,5 @@
 """
-ASGI config for unifood project.
+ASGI config for umenu project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unifood.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'umenu.settings')
 
 application = get_asgi_application()
