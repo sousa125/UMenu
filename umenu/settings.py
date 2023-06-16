@@ -69,10 +69,10 @@ TEMPLATES = [
 ]
 
 #Development Environment
-WSGI_APPLICATION = 'umenu.wsgi.application'
+#WSGI_APPLICATION = 'umenu.wsgi.application'
 
 #Vercel Environement
-#WSGI_APPLICATION = 'vercel_app.wsgi.app'
+WSGI_APPLICATION = 'vercel_app.wsgi.app'
 
 
 # Database
