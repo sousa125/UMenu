@@ -78,12 +78,24 @@ WSGI_APPLICATION = 'vercel_app.wsgi.app'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'verceldb',
+        'USER': 'default',
+        'PASSWORD': 'iNQHcS3yu1gl',
+        'HOST': 'ep-withered-dream-370078-pooler.us-east-1.postgres.vercel-storage.com',
+        'PORT': '5432',
+    }
 }
+
 
 
 # Password validation
