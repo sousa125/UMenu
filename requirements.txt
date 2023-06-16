@@ -2,5 +2,4 @@
     Django==4.1.5
     python-dateutil==2.8.2
     six==1.16.0
-    sqlparser==0.4.3
     tzdata==2022.7
