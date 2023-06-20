@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-fa#88(#a10)p0o1gb6#10+9#+vkvn2rhg&=e8-*to-c%!*-(f*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -87,20 +87,23 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+'''
+
 
 DATABASES['default'] = dj_database_url.config()
-'''
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'verceldb',
-        'USER': 'default',
-        'PASSWORD': 'iNQHcS3yu1gl',
-        'HOST': 'ep-withered-dream-370078-pooler.us-east-1.postgres.vercel-storage.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'ZqJaRMQ7PQJylVR3bspI',
+        'HOST': 'containers-us-west-184.railway.app',
+        'PORT': '5459',
     }
 }
 '''
+
 
 
 # Password validation
@@ -140,7 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "staticfiles_build" / "static"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -1,0 +1,1 @@
+web: gunicorn umenu.wsgi --log-file -
