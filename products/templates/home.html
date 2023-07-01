@@ -31,9 +31,11 @@
           <!---Seletor de setores-->
           <select id="setorSelect" class="px-4 py-2 pl-10 pr-8 min-w-min h-12 bg-white text-gray-700 rounded-full appearance-none focus:bg-white" style="width: auto">
             <option value="">Setor</option>
-            {% for setor in setores %}
-              <option value="{{ setor.id }}">{{ setor.nome }}</option>
-            {% endfor %}
+            {% with setores_ordenados=setores|dictsort:'nome' %}
+              {% for setor in setores_ordenados %}
+                <option value="{{ setor.id }}">{{ setor.nome }}</option>
+              {% endfor %}
+            {% endwith %}  
           </select>
 
           <div
@@ -223,6 +225,8 @@
       if (selectedSetor) {
         setorSelect.value = selectedSetor;
         carregarVendedores(selectedSetor); // Chama a função para carregar a lista de vendedores
+      } else {
+        $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Selecione um setor para exibir os vendedores</p></center>');
       }
     });
   
@@ -233,25 +237,25 @@
       }
   
       $.ajax({
-      url: '/buscar-vendedores/',
-      method: 'GET',
-      data: {
-        setor_id: setorId
-      },
-      success: function(response) {
-        if ($.trim(response) === ''){
-          $('#vendedoresContainer').html('<center>   <img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p> </center>');
-        } else {
-          $('#vendedoresContainer').html(response);
+        url: '/buscar-vendedores/',
+        method: 'GET',
+        data: {
+          setor_id: setorId
+        },
+        success: function(response) {
+          if ($.trim(response) === '') {
+            $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p></center>');
+          } else {
+            $('#vendedoresContainer').html(response);
+          }
+        },
+        error: function() {
+          console.error('Ocorreu um erro ao buscar os vendedores.');
         }
-      },
-      error: function() {
-        console.error('Ocorreu um erro ao buscar os vendedores.');
-      }
-    });
-
+      });
     }
   </script>
+  
   
 
   <footer
