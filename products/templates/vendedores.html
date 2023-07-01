@@ -1,4 +1,4 @@
-  <!-- Listagem de vendedore disponíveis -->
+
   {% for vendedor in vendedores %}
   {% if vendedor.status == "Disponível" %}
   <div class="vendedor disponivel bg-white rounded p-4">
@@ -19,7 +19,6 @@
   {% endif %}
 {% endfor %}
 
-<!-- Listagem de vendedore indisponíveis -->
 {% for vendedor in vendedores %}
   {% if vendedor.status == "Indisponível" %}
 <div class="vendedor indisponivel bg-white rounded p-4">
@@ -39,4 +38,3 @@
 </div>
   {% endif %}
 {% endfor %}
-</div>

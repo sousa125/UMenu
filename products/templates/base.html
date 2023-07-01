@@ -25,7 +25,22 @@
 
     <footer>
         <!-- Rodapé -->
-        <p>&copy; 2023 Meu Projeto. Todos os direitos reservados.</p>
+
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    
+            if (screenWidth > 768) { // Altere o valor "768" para o tamanho de tela desejado
+                var messageElement = document.createElement("div");
+                messageElement.className = "fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-80 text-white text-2xl";
+                messageElement.innerText = "Este site foi projetado para ser acessado em smartphones.";
+    
+                document.body.insertBefore(messageElement, document.body.firstChild);
+            }
+        });
+    </script>
+    
+    
 </body>
 </html>
