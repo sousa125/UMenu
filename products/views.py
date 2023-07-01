@@ -1,5 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from products.models import Produto, Vendedor, Setor
+from django.shortcuts import render
+
+def buscar_vendedores(request):
+    setor_id = request.GET.get('setor_id')
+    vendedores = Vendedor.objects.filter(setores__id=setor_id)
+    return render(request, 'vendedores.html', {'vendedores': vendedores})
 
 def lista_produtos(request):
     produtos = Produto.objects.all()

@@ -28,13 +28,11 @@
             </svg>
           </div>
 
-          <select
-            class="px-4 py-2 pl-10 pr-8 min-w-min h-12 bg-white text-gray-700 rounded-full appearance-none focus:bg-white"
-            style="width: auto"
-          >
+          <!---Seletor de setores-->
+          <select id="setorSelect" class="px-4 py-2 pl-10 pr-8 min-w-min h-12 bg-white text-gray-700 rounded-full appearance-none focus:bg-white" style="width: auto">
             <option value="">Setor</option>
             {% for setor in setores %}
-            <option value="{{ setor }}">{{ setor }}</option>
+              <option value="{{ setor.id }}">{{ setor.nome }}</option>
             {% endfor %}
           </select>
 
@@ -208,49 +206,48 @@
   <div
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-4 pl-4"
   >
+  <div id="vendedoresContainer"></div>
 
-  <!-- Listagem de vendedore disponíveis -->
-    {% for vendedor in vendedores %}
-      {% if vendedor.status == "Disponível" %}
-      <div class="bg-white rounded p-4">
-        <div class="flex items-center justify-left">
-          <div class="w-20 h-20 bg-gray-200 rounded-full overflow-hidden">
-            {% if vendedor.foto_perfil %}
-                <img src="{{vendedor.foto_perfil}}" alt="{{ vendedor.nome }}" class="w-full h-full object-cover">
-            {% else %}
-              <img src="https://i.imgur.com/4CeT9zI.png" alt="{{ vendedor.nome }}" class="w-full h-full object-cover">
-            {% endif %}  
-          </div>
-          <div class="ml-4">
-            <h5 class="text-lg font-bold leading-tight my-1">{{ vendedor.nome }}</h5>
-              <p class="text-green-600 text-sm leading-tight mb-1">{{ vendedor.status }}</p> 
-          </div>
-        </div>
-      </div>
-      {% endif %}
-    {% endfor %}
-
-  <!-- Listagem de vendedore indisponíveis -->
-    {% for vendedor in vendedores %}
-      {% if vendedor.status == "Indisponível" %}
-    <div class="bg-white rounded p-4">
-      <div class="flex items-center justify-left">
-        <div class="w-20 h-20 bg-gray-200 rounded-full overflow-hidden">
-          {% if vendedor.foto_perfil %}
-              <img src="{{vendedor.foto_perfil}}" alt="{{ vendedor.nome }}" class="w-full h-full object-cover filter grayscale">
-          {% else %}
-            <img src="https://i.imgur.com/4CeT9zI.png" alt="{{ vendedor.nome }}" class="w-full h-full object-cover">
-          {% endif %}  
-        </div>
-        <div class="ml-4">
-          <h5 class="text-lg font-bold leading-tight my-1">{{ vendedor.nome }}</h5>
-            <p class="text-gray-600 text-sm leading-tight mb-1">{{ vendedor.status }}</p>
-        </div>
-      </div>
-    </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var setorSelect = document.getElementById("setorSelect");
+  
+      setorSelect.addEventListener("change", function() {
+        var selectedValue = setorSelect.value;
+        sessionStorage.setItem("selectedSetor", selectedValue);
+  
+        carregarVendedores(selectedValue); // Chama a função para carregar a lista de vendedores
+      });
+  
+      var selectedSetor = sessionStorage.getItem("selectedSetor");
+      if (selectedSetor) {
+        setorSelect.value = selectedSetor;
+        carregarVendedores(selectedSetor); // Chama a função para carregar a lista de vendedores
+      }
+    });
+  
+    function carregarVendedores(setorId) {
+      if (setorId === '') {
+        $('#vendedoresContainer').empty();  // Limpa a lista de vendedores
+        return;
+      }
+  
+      $.ajax({
+        url: '/buscar-vendedores/',
+        method: 'GET',
+        data: {
+          setor_id: setorId
+        },
+        success: function(response) {
+          $('#vendedoresContainer').html(response);
+        },
+        error: function() {
+          console.error('Ocorreu um erro ao buscar os vendedores.');
+        }
+      });
+    }
+  </script>
+  
 
   <footer
     class="fixed bottom-0 left-0 right-0 bg-white h-16 flex items-center justify-between pl-12 pr-12"
