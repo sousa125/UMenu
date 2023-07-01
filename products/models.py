@@ -1,10 +1,23 @@
 from django.db import models
+from django.utils import timezone
+from datetime import time
 
 class Vendedor(models.Model):
     nome = models.CharField(max_length=100)
     email = models.EmailField()
     telefone = models.CharField(max_length=20)
     setores = models.ManyToManyField('Setor')
+    foto_perfil = models.URLField(blank=True, null=True)
+    horario_abertura = models.TimeField()
+    horario_fechamento = models.TimeField()
+
+    @property
+    def status(self):
+        now = timezone.now().time()
+        if self.horario_abertura <= now < self.horario_fechamento:
+            return 'Disponível'
+        else:
+            return 'Indisponível'
 
     def __str__(self):
         return self.nome
