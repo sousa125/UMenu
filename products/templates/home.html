@@ -64,8 +64,9 @@
       <div class="relative">
         <input
           type="text"
+          id="searchInput"
           class="w-full h-12 px-4 py-2 rounded-full pl-10"
-          placeholder="Busque por prato, vendedor, ou categoria"
+          placeholder="Insira aqui o nome do vendedor"
         />
         <div class="absolute inset-y-0 left-0 flex items-center pl-3">
           <svg
@@ -209,52 +210,67 @@
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-4 pl-4"
   >
   <div id="vendedoresContainer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var setorSelect = document.getElementById("setorSelect");
+  var searchInput = document.getElementById("searchInput");
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var setorSelect = document.getElementById("setorSelect");
-  
-      setorSelect.addEventListener("change", function() {
-        var selectedValue = setorSelect.value;
-        sessionStorage.setItem("selectedSetor", selectedValue);
-  
-        carregarVendedores(selectedValue); // Chama a função para carregar a lista de vendedores
-      });
-  
+  setorSelect.addEventListener("change", function() {
+    var selectedValue = setorSelect.value;
+    sessionStorage.setItem("selectedSetor", selectedValue);
+    carregarVendedores(selectedValue, searchInput.value);
+  });
+
+  searchInput.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
       var selectedSetor = sessionStorage.getItem("selectedSetor");
-      if (selectedSetor) {
-        setorSelect.value = selectedSetor;
-        carregarVendedores(selectedSetor); // Chama a função para carregar a lista de vendedores
-      } else {
-        $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Selecione um setor para exibir os vendedores</p></center>');
-      }
-    });
-  
-    function carregarVendedores(setorId) {
-      if (setorId === '') {
-        $('#vendedoresContainer').empty();  // Limpa a lista de vendedores
-        return;
-      }
-  
-      $.ajax({
-        url: '/buscar-vendedores/',
-        method: 'GET',
-        data: {
-          setor_id: setorId
-        },
-        success: function(response) {
-          if ($.trim(response) === '') {
-            $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p></center>');
-          } else {
-            $('#vendedoresContainer').html(response);
-          }
-        },
-        error: function() {
-          console.error('Ocorreu um erro ao buscar os vendedores.');
-        }
-      });
+      carregarVendedores(selectedSetor, searchInput.value);
     }
-  </script>
+  });
+
+  var selectedSetor = sessionStorage.getItem("selectedSetor");
+  if (selectedSetor) {
+    setorSelect.value = selectedSetor;
+    carregarVendedores(selectedSetor, searchInput.value);
+  } else {
+    mostrarEmptyState();
+  }
+});
+
+function carregarVendedores(setorId, searchTerm) {
+  if (setorId === '') {
+    mostrarEmptyState();
+    return;
+  }
+
+  $.ajax({
+    url: '/buscar-vendedores/',
+    method: 'GET',
+    data: {
+      setor_id: setorId,
+      search_term: searchTerm
+    },
+    success: function(response) {
+      if ($.trim(response) === '') {
+        $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p></center>');
+      } else {
+        $('#vendedoresContainer').html(response);
+      }
+    },
+    error: function() {
+      console.error('Ocorreu um erro ao buscar os vendedores.');
+    }
+  });
+}
+
+function mostrarEmptyState() {
+  $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Selecione um setor para exibir os vendedores</p></center>');
+}
+
+</script>
+
+  
+  
   
   
 

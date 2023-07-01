@@ -4,8 +4,15 @@ from django.shortcuts import render
 
 def buscar_vendedores(request):
     setor_id = request.GET.get('setor_id')
+    search_term = request.GET.get('search_term')
+
     vendedores = Vendedor.objects.filter(setores__id=setor_id)
+
+    if search_term:
+        vendedores = vendedores.filter(nome__icontains=search_term)
+
     return render(request, 'vendedores.html', {'vendedores': vendedores})
+
 
 def lista_produtos(request):
     produtos = Produto.objects.all()
