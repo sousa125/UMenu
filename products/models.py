@@ -1,6 +1,6 @@
 from django.db import models
-from django.utils import timezone
-from datetime import time
+from datetime import datetime
+import pytz
 
 class Vendedor(models.Model):
     nome = models.CharField(max_length=100)
@@ -13,11 +13,13 @@ class Vendedor(models.Model):
 
     @property
     def status(self):
-        now = timezone.now().time()
+        fuso_horario = pytz.timezone('America/Sao_Paulo')
+        now = datetime.now(fuso_horario).time()
         if self.horario_abertura <= now < self.horario_fechamento:
             return 'Disponível'
         else:
             return 'Indisponível'
+
 
     def __str__(self):
         return self.nome

@@ -11,6 +11,7 @@ def buscar_vendedores(request):
     if search_term:
         vendedores = vendedores.filter(nome__icontains=search_term)
 
+    print(now)
     return render(request, 'vendedores.html', {'vendedores': vendedores})
 
 
