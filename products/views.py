@@ -11,7 +11,6 @@ def buscar_vendedores(request):
     if search_term:
         vendedores = vendedores.filter(nome__icontains=search_term)
 
-    print(now)
     return render(request, 'vendedores.html', {'vendedores': vendedores})
 
 
@@ -33,3 +32,11 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
+
+def catalogo_vendedor(request, vendedor_id):
+    products = Produto.objects.filter(vendedor=vendedor_id)
+    print('PRODUTOS ', products)
+    context = {
+        'products': products
+    }
+    return render(request, 'catalogo.html', context)
