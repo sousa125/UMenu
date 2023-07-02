@@ -26,13 +26,15 @@
     </header>
 
     <!-- Conteúdo principal -->
+
+
     <main class="container mx-auto p-1 pb-16">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            <!-- Produto 1 -->
-            {% for produto in produtos %}
-            {% load custom_filters %}
-            <div class="w-40 h-70 bg-gray-100 rounded-lg shadow-md overflow-hidden flex flex-col relative">
-                <img src="{{ produto.foto_produto }}" alt="Produto 1" class="w-full h-48 object-cover">
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+          {% for produto in produtos %}
+          {% load custom_filters %}
+          <div class="w-64 h-100 bg-gray-100 rounded-lg shadow-md overflow-hidden flex flex-col relative">
+          
+                <img src="{{ produto.foto_produto }}" alt="Produto 1" class="w-full h-60 object-cover">
                 <div class="flex flex-col justify-between flex p-2 mt-0">
                   <h2 class="text-lg font-semibold overflow-hidden whitespace-nowrap overflow-ellipsis mb-0">{{ produto.nome }}</h2>
                   <div class="flex items-center justify-between">
