@@ -252,7 +252,7 @@ function carregarVendedores(setorId, searchTerm) {
     },
     success: function(response) {
       if ($.trim(response) === '') {
-        $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p></center>');
+        $('#vendedoresContainer').html('<center><img src="https://imgur.com/meJbcrc.png" /><p class="text-xl mt-8">Não há vendedores cadastrados nesse setor</p></center>');
       } else {
         $('#vendedoresContainer').html(response);
       }
@@ -264,7 +264,7 @@ function carregarVendedores(setorId, searchTerm) {
 }
 
 function mostrarEmptyState() {
-  $('#vendedoresContainer').html('<center><img src="https://imgur.com/0EPV9rY.png" /><p class="text-xl mt-8">Selecione um setor para exibir os vendedores</p></center>');
+  $('#vendedoresContainer').html('<center><img src="https://imgur.com/meJbcrc.png" /><p class="text-xl mt-8">Selecione um setor para exibir os vendedores</p></center>');
 }
 
 </script>
