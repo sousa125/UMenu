@@ -2,7 +2,7 @@
     <!-- Barra de navegação superior -->
     <header class="flex justify-between items-center px-4 py-2">
         <!-- Botão Voltar -->
-        <button>
+        <button  onclick="window.location.href = '/';">
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="22" cy="22" r="21.5" fill="white" stroke="#F1F1F5"/>
             <path d="M24.75 15.5833C24.6294 15.5826 24.5098 15.6058 24.3981 15.6514C24.2864 15.697 24.1849 15.7642 24.0992 15.8492L18.5992 21.3492C18.4285 21.5209 18.3326 21.7533 18.3326 21.9954C18.3326 22.2376 18.4285 22.4699 18.5992 22.6417L24.0992 28.1417C24.2746 28.2918 24.5001 28.3703 24.7308 28.3614C24.9615 28.3525 25.1804 28.2569 25.3436 28.0936C25.5069 27.9304 25.6025 27.7115 25.6114 27.4808C25.6203 27.2501 25.5419 27.0245 25.3917 26.8492L20.5425 22L25.3917 17.1508C25.5204 17.0232 25.6084 16.8602 25.6445 16.6825C25.6806 16.5049 25.6632 16.3205 25.5945 16.1527C25.5258 15.9849 25.409 15.8413 25.2586 15.7399C25.1083 15.6386 24.9313 15.5841 24.75 15.5833Z" fill="#06161C"/>
@@ -10,7 +10,7 @@
         </button>
 
         <!-- Nome da loja -->
-        <h1 class="text-black text-2xl font-bold">Nome da Loja</h1>
+        <h1 class="text-black text-2xl font-bold">{{ nome_vendedor }}</h1>
 
         <!-- Barra de busca -->
         <div class="relative">
@@ -26,16 +26,16 @@
     </header>
 
     <!-- Conteúdo principal -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 mb-16">
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <!-- Produto 1 -->
-
             {% for produto in produtos %}
+            {% load custom_filters %}
             <div class=" w-44 h-60 bg-gray-100 rounded-lg shadow-md overflow-hidden flex flex-col relative">
-                <img src="https://via.placeholder.com/150" alt="Produto 1" class="w-full h-48 object-cover">
+                <img src="{{ produto.foto_produto }}" alt="Produto 1" class="w-full h-48 object-cover">
                 <div class="flex flex-col justify-between flex-1 p-2">
-                    <h2 class="text-lg font-semibold">Produto 1</h2>
-                    <p class="text-red-500 font-semibold mb-3">R$ 3,00</p>
+                    <h2 class="text-lg font-semibold">{{ produto.nome }}</h2>
+                    <p class="text-red-500 font-semibold mb-3">R$ {{ produto.preco|floatformat:2|replace_dot_with_comma }}</p>
                     <button class= "absolute bottom-4 right-4" >
                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="36" height="36" rx="18" fill="#23AA49"/>
@@ -52,8 +52,8 @@
                     </button>
                 </div>
             </div>
-
             {% endfor %}
+
         </div>
     </main>
 

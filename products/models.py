@@ -36,6 +36,7 @@ class Produto(models.Model):
     categoria = models.CharField(max_length=100)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     descricao = models.TextField()
+    foto_produto = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.nome

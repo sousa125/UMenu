@@ -34,9 +34,10 @@ def home(request):
     return render(request, 'home.html', context)
 
 def catalogo_vendedor(request, vendedor_id):
-    products = Produto.objects.filter(vendedor=vendedor_id)
-    print('PRODUTOS ', products)
+    produtos = Produto.objects.filter(vendedor=vendedor_id)
+    vendedor = Vendedor.objects.get(id=vendedor_id)
     context = {
-        'products': products
+        'produtos': produtos,
+        'nome_vendedor': vendedor.nome,
     }
     return render(request, 'catalogo.html', context)
