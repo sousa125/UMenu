@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex items-center justify-between bg-gray-100 py-4 px-6">
+    <!-- Botão de Voltar -->
+    <button class="flex items-center text-gray-600 hover:text-gray-800" onclick="history.back()">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="21.5" fill="white" stroke="#F1F1F5"/>
+            <path d="M24.7499 15.5833C24.6293 15.5826 24.5097 15.6058 24.398 15.6514C24.2863 15.697 24.1847 15.7642 24.0991 15.8492L18.5991 21.3492C18.4283 21.5209 18.3325 21.7533 18.3325 21.9954C18.3325 22.2376 18.4283 22.4699 18.5991 22.6417L24.0991 28.1417C24.2744 28.2918 24.5 28.3703 24.7307 28.3614C24.9614 28.3525 25.1803 28.2569 25.3435 28.0936C25.5068 27.9304 25.6024 27.7115 25.6113 27.4808C25.6202 27.2501 25.5418 27.0245 25.3916 26.8492L20.5424 22L25.3916 17.1508C25.5203 17.0232 25.6083 16.8602 25.6444 16.6825C25.6805 16.5049 25.6631 16.3205 25.5944 16.1527C25.5257 15.9849 25.4088 15.8413 25.2585 15.7399C25.1082 15.6386 24.9312 15.5841 24.7499 15.5833Z" fill="#06161C"/>
+        </svg>
+    </button>
+
+    <!-- Título -->
+    <h1 class="text-2xl font-bold text-gray-800 mx-auto">Carrinho</h1>
+</div>
+<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+    <!-- Produtos Selecionados -->
+    <div class="w-4/5 md:w-2/5">
+        <!-- Produto 1 -->
+        {% for produto in produtos %}
+        {% load custom_filters %}
+        <div class="flex items-center bg-white rounded-lg p-4 mb-4">
+            <!-- Foto do Produto -->
+            <img src="{{ produto.produto.foto_produto }}" alt="{{ produto.produto.nome }}" class="w-16 h-16 rounded-full">
+
+            <div class="flex-grow ml-4">
+                <!-- Nome e Preço do Produto -->
+                <h2 class="text-lg font-semibold">{{ produto.produto.nome }}</h2>
+                <p class="text-gray-500">R${{ produto.produto.preco|floatformat:2|replace_dot_with_comma }}</p>
+            </div>
+
+            <!-- Quantidade Selecionada -->
+            <div class="qtd-input cart-qtd-input h-10 flex items-center justify-center bg-gray-100 rounded-full px-1 py-0.5 shadow-md" data-product-id="{{ produto.produto.id }}" data-product-preco="{{ produto.produto.preco }}" data-vendedor-id="{{ produto.produto.vendedor.id }}" data-vendedor-id="{{ produto.produto.vendedor.nome }}" data-product-nome="{{ produto.produto.nome }}">
+                <button data-action="decrement" class="bg-gray-100 text-gray-600 rounded-l-full hover:text-gray-700 hover:bg-gray-400 h-full w-8 rounded-l cursor-pointer outline-none">
+                    <span class="m-auto text-sm font-thin">−</span>
+                </button>
+                <input type="number" class="qtd outline-none focus:outline-none text-center w-10 bg-gray-100 font-semibold text-sm hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none" name="custom-input-number" value="{{ produto.quantidade }}">
+                </input>
+                <button data-action="increment" class="bg-gray-100 text-gray-600 rounded-r-full hover:text-gray-700 hover:bg-gray-400 h-full w-8 rounded-r cursor-pointer">
+                    <span class="m-auto text-sm font-thin">+</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Linha e Total -->
+        <hr class="my-4 border-t border-gray-300">
+
+        <div class="flex justify-between">
+            <p class="text-gray-600">Total:</p>
+            <p id="total" class="text-red-600 font-semibold">R${{ total|floatformat:2|replace_dot_with_comma }}</p>
+        </div>
+
+        <!-- Botão Finalizar Compra -->
+        <button  data-vendedor-telefone="{{ vendedor_telefone }}" id="finalizarCompraBtn" class="w-full bg-green-500 text-white py-2 px-4 rounded-lg font-medium mt-4">Finalizar Compra</button>
+    </div>
+</div>
+
+<script>
+
+    console.log(sessionStorage.getItem('produtos'));
+// Função para atualizar o valor total
+// Função para calcular o valor total do carrinho e atualizar o elemento correspondente
+function updateTotal() {
+    const produtos = JSON.parse(sessionStorage.getItem('produtos'));
+    let total = 0;
+
+    if (produtos && produtos.length > 0) {
+        produtos.forEach(produto => {
+            const preco = parseFloat(produto.preco);
+            const quantidade = produto.quantidade;
+            total += preco * quantidade;
+        });
+    }
+
+    const totalElement = document.getElementById('total');
+    if (totalElement) {
+        totalElement.textContent = `R$${total.toFixed(2).replace('.', ',')}`;
+    }
+}
+
+// Atualiza o valor total ao carregar a página
+updateTotal();
+
+
+
+
+
+
+
+
+
+
+
+
+  const finalizarCompraBtn = document.getElementById('finalizarCompraBtn');
+  if (finalizarCompraBtn) {
+    finalizarCompraBtn.addEventListener('click', () => {
+      const produtos = JSON.parse(sessionStorage.getItem('produtos'));
+      const telefone = finalizarCompraBtn.getAttribute('data-vendedor-telefone');
+
+      if (produtos && produtos.length > 0) {
+        let mensagem = 'Olá, Gostaria de pedir:\n\n';
+        mensagem += 'Qtd\t\t\tDescrição\n';
+
+        produtos.forEach((produto) => {
+          const nome = produto.nome;
+          const quantidade = produto.quantidade;
+          const preco = parseFloat(produto.preco);
+          const subtotal = preco * quantidade;
+
+          mensagem += `${quantidade}X\t\t\t${nome}\n`;
+        });
+
+        const total = produtos.reduce((acc, produto) => {
+          const preco = parseFloat(produto.preco);
+          const quantidade = produto.quantidade;
+          return acc + (preco * quantidade);
+        }, 0);
+
+        mensagem += '\n💰 TOTAL A PAGAR: R$ ' + total.toFixed(2).replace('.', ',');
+        
+        // Encaminhar para o WhatsApp com a mensagem pré-preenchida
+        const url = `https://api.whatsapp.com/send?phone=55${telefone}&text=${encodeURIComponent(mensagem)}`;
+        window.open(url, '_blank');
+      }
+    });
+  }
+</script>
+
+{% endblock %}

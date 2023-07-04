@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from products.models import Produto, Vendedor, Setor
 from django.shortcuts import render
+import json
 
 def buscar_vendedores(request):
     setor_id = request.GET.get('setor_id')
@@ -38,6 +39,37 @@ def catalogo_vendedor(request, vendedor_id):
     vendedor = Vendedor.objects.get(id=vendedor_id)
     context = {
         'produtos': produtos,
-        'nome_vendedor': vendedor.nome,
+        'vendedor': vendedor,
     }
     return render(request, 'catalogo.html', context)
+
+
+from django.shortcuts import render
+
+from django.shortcuts import render
+
+def carrinho(request):
+    produtos = []
+    for key, value in request.GET.items():
+        if key.startswith('produtos') and value != '':
+            split_key = key.split('.')
+            index = int(''.join(filter(str.isdigit, split_key[0])))
+            attr = split_key[1]
+            if len(produtos) <= index:
+                produtos.append({})
+            produtos[index][attr] = value
+    # Consulta os detalhes dos produtos no banco de dados (isso depende do seu modelo de dados)
+    # Supondo que você tenha um modelo chamado 'Produto' com os campos 'nome' e 'quantidade'
+    product_ids = [produto['id'] for produto in produtos]
+    products = Produto.objects.filter(id__in=product_ids)
+    # Anexa a quantidade a cada produto com base nos dados do carrinho
+    produtos_com_quantidade = []
+    vendedor = Vendedor.objects.get(id=products[0].vendedor_id)
+    print(vendedor.telefone)
+    for produto in products:
+        index = product_ids.index(str(produto.id))
+        quantidade = int(produtos[index]['quantidade'])
+        produtos_com_quantidade.append({'produto': produto, 'quantidade': quantidade})
+    
+    context = {'produtos': produtos_com_quantidade, 'vendedor_telefone':vendedor.telefone }
+    return render(request, 'carrinho.html', context)
